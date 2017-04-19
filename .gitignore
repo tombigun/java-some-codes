@@ -1,0 +1,12 @@
+# Created by .ignore support plugin (hsz.mobi)
+### JetBrains template
+.idea/
+*.iml
+
+## File-based project format:
+*.iws
+
+## Plugin-specific files:
+
+# IntelliJ
+/out/
