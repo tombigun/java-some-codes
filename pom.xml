@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>secure-utils</module>
+        <module>test-ftp</module>
     </modules>
 
     <properties>
