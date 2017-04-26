@@ -35,15 +35,26 @@ public class RSAUtil {
     private static final int KEY_SIZE = 1024;
 
     /**
-     * 私钥解密
+     * 得到公钥
      *
-     * @param data 待解密数据
-     * @param key  私钥
-     * @return byte[] 解密数据
+     * @param key 密钥字符串（经过base64编码）
      * @throws Exception
      */
-    public static byte[] decryptByPrivateKey(byte[] data, String key) throws Exception {
+    public static RSAPublicKey getPublicKey(String key) throws Exception {
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.decodeBase64(key.getBytes()));
+        KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM_RSA);
+        PublicKey publicKey = keyFactory.generatePublic(keySpec);
 
+        return (RSAPublicKey) publicKey;
+    }
+
+    /**
+     * 得到私钥
+     *
+     * @param key 密钥字符串（经过base64编码）
+     * @throws Exception
+     */
+    public static RSAPrivateKey getPrivateKey(String key) throws Exception {
         // 取得私钥
         PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(Base64.decodeBase64(key.getBytes()));
 
@@ -52,13 +63,26 @@ public class RSAUtil {
         // 生成私钥
         PrivateKey privateKey = keyFactory.generatePrivate(pkcs8KeySpec);
 
+        return (RSAPrivateKey) privateKey;
+    }
+
+
+    /**
+     * 私钥解密
+     *
+     * @param data       待解密数据
+     * @param privateKey 私钥
+     * @return byte[] 解密数据
+     * @throws Exception
+     */
+    public static byte[] decryptByPrivateKey(byte[] data, RSAPrivateKey privateKey) throws Exception {
         // 对数据解密
-        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+        Cipher cipher = Cipher.getInstance(KEY_ALGORITHM_RSA);
 
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
 
 
-        int key_len = ((RSAPrivateKey)privateKey).getModulus().bitLength() / 8;
+        int key_len = ((RSAPrivateKey) privateKey).getModulus().bitLength() / 8;
         int max_len = key_len;
         byte[] mi_data = Base64.decodeBase64(data);
 
@@ -68,7 +92,7 @@ public class RSAUtil {
         cc = (data_len % max_len == 0) ? cc : cc + 1;
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(64);
-        try{
+        try {
             for (int i = 0; i < cc; i++) {
 
                 int end = (start + max_len > data_len) ? data_len : start + max_len;
@@ -93,17 +117,12 @@ public class RSAUtil {
     /**
      * 公钥加密
      *
-     * @param data
-     *            待加密数据
-     * @param key
-     *            公钥
+     * @param data 待加密数据
+     * @param publicKey  公钥
      * @return byte[] 加密数据
      * @throws Exception
      */
-    public static byte[] encryptByPublicKey(byte[] data, String key) throws Exception {
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.decodeBase64(key.getBytes()));
-        KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM_RSA);
-        PublicKey publicKey = keyFactory.generatePublic(keySpec);
+    public static byte[] encryptByPublicKey(byte[] data, RSAPublicKey publicKey) throws Exception {
 
         /** 得到Cipher对象来实现对源数据的RSA加密 */
         Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
@@ -111,7 +130,7 @@ public class RSAUtil {
 
         /** 执行加密操作 */
         // 模长
-        int key_len = ((RSAPublicKey)publicKey).getModulus().bitLength() / 8;
+        int key_len = ((RSAPublicKey) publicKey).getModulus().bitLength() / 8;
         // 加密数据长度 <= 模长-11
         int max_len = key_len - 11;
 
@@ -122,7 +141,7 @@ public class RSAUtil {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(64);
 
-        try{
+        try {
             for (int i = 0; i < cc; i++) {
 
                 int end = (start + max_len > data_len) ? data_len : start + max_len;
@@ -145,20 +164,13 @@ public class RSAUtil {
 
     /**
      * 使用私钥 对数据进行签名
+     *
      * @param data
+     * @param privateKey 私钥
      * @return
      * @throws Exception
      */
-    public static String signByPrivateKey(byte[] data, String key) throws Exception
-    {
-        // 取得私钥
-        PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(Base64.decodeBase64(key.getBytes()));
-
-        KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM_RSA);
-
-        // 生成私钥
-        PrivateKey privateKey = keyFactory.generatePrivate(pkcs8KeySpec);
-
+    public static String signByPrivateKey(byte[] data, RSAPrivateKey privateKey) throws Exception {
         Signature signature = Signature.getInstance(SIGN_ALGORITHM);
         signature.initSign(privateKey);
         signature.update(data);
@@ -174,14 +186,11 @@ public class RSAUtil {
      *
      * @param data
      * @param sign
+     * @param publicKey  公钥
      * @return
      * @throws Exception
      */
-    public static boolean verifySignByPublicKey(byte[] data, String sign, String key) throws Exception {
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.decodeBase64(key.getBytes()));
-        KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM_RSA);
-        PublicKey publicKey = keyFactory.generatePublic(keySpec);
-
+    public static boolean verifySignByPublicKey(byte[] data, String sign, RSAPublicKey publicKey) throws Exception {
         Signature signature = Signature.getInstance(SIGN_ALGORITHM);
         signature.initVerify(publicKey);
         signature.update(data);

@@ -43,13 +43,13 @@ public class TestRSA {
     public void Tested() throws Exception {
         byte[] data = "1234567890你好12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890text12".getBytes("utf-8");
 
-        byte[] bytes = RSAUtil.encryptByPublicKey(data, rsa_public);
-        byte[] bytes1 = RSAUtil.decryptByPrivateKey(bytes, rsa_PKCS8_private);
+        byte[] bytes = RSAUtil.encryptByPublicKey(data, RSAUtil.getPublicKey(rsa_public));
+        byte[] bytes1 = RSAUtil.decryptByPrivateKey(bytes, RSAUtil.getPrivateKey(rsa_PKCS8_private));
 
         System.out.println(new String(bytes));
 
-        String s = RSAUtil.signByPrivateKey(data, rsa_PKCS8_private);
-        boolean b = RSAUtil.verifySignByPublicKey(data, s, rsa_public);
+        String s = RSAUtil.signByPrivateKey(data, RSAUtil.getPrivateKey(rsa_PKCS8_private));
+        boolean b = RSAUtil.verifySignByPublicKey(data, s, RSAUtil.getPublicKey(rsa_public));
 
         Assert.assertArrayEquals(data, bytes1);
         Assert.assertTrue(b);
