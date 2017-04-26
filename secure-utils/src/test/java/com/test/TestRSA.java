@@ -10,49 +10,50 @@ import org.junit.Test;
  */
 public class TestRSA {
 
-    private static String rsa_private = "" +
-//            "-----BEGIN RSA PRIVATE KEY-----" +
-            "MIICWgIBAAKBgHiVDou7DuJ95B587DgpMd6iJ7bAtRDHoC+Es7vBY36CuIsE7mS/" +
-            "04uhJesfp1blLrqcvX4YJh0alsFvXCPSSa9wSQoqAvumCx8fx+Y7PXi953HGfIU2" +
-            "osCVEdb1eNFGnTEYSFt10jnFaY2Zu1aIbOZlwbzTDfjmoWWXo9WqbL1vAgMBAAEC" +
-            "gYAMXbT1LYTUQ3bejY8oH0lm/Jg4DMFE7EQIO4K3MZkDg2Jrl2DfYjDOtAMQftmJ" +
-            "ds15A9QHF3DpMS3evo3jepBl0lfF6PxD9ggdV33YiK5IrXMHDmaHxNxwZHB7OnDH" +
-            "+xjXxr5shE/XdJKq1TYs8LolHAZ3uJooCgSQEpJH3M5ioQJBAMGyqfbgwVa3dw4b" +
-            "lR5Q6Ws5DCCg/XS6lltMNRHt6MnD3oxL4oa5sMzjDRLm4XH/wpsrZ6w78LdBC8/b" +
-            "0I7tLR8CQQCfXfSbHI3xeKCUlG8IBRNtge1h/2d7DWgp+DpdRsm3SPfBzJV5Hmji" +
-            "M0LJwMJgAxrLtTuhBDWoSa8Yjkw3oxWxAkB9BdIYzJdeXosU6w7EA5u2HptKUD9o" +
-            "Yar9AOJcUUBpQujZi32KUj7g8EiXA7lOeLPmrgx7qjDER9LU9l/WcRYnAkAoIWmy" +
-            "EYuwzbZqE8Kt21FcFwam0cDGHMcpImfYCzZKYCZ7d8AAAudYZp4f3dlUghOiTl3Y" +
-            "mw3D9eIQpeyNahTRAkB28bchIctphliFH++YRxGS1BaFe0zrS5XqL0I+7+ivSpi/" +
-            "e9lh5iStYh+hXhFRLKy0y/Ene0wNFgnEDBbjyfXz" +
-//            "-----END RSA PRIVATE KEY-----" +
+    private static String rsa_PKCS8_private = "" +
+//            "-----BEGIN PRIVATE KEY-----" +
+            "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJGgyb45Um0GK5+I" +
+            "BT0RDgM0OuXS5E/eLGGdj+9iPvalPLF9FqSKcZGMmzgXQbYoc5XudoJz7cnl+gOs" +
+            "j1Dc7gyJnNrpAjtKINJktB3TZ4/a60MVFqJ0H6TE4mMS8T7ThCRkk3DdBKuj6iUz" +
+            "reBH3go6e9Hr0zVAVzaXbpSI+NNTAgMBAAECgYBQfOvEJW53L5fgvo8Wp1x1TOLY" +
+            "r2zc79DbyvgIuOZP8BfRiW+AVbxbU7lekQwSn9zymzAI/gYJNwCuEyvK57Dxhcg7" +
+            "FW2fY4k9YyDTihyJGmMRJijaCd6V/S+ThQuC3ZUKv+E2mgdclkLx3K6uYZH+EBp1" +
+            "N31B8yB3E9+56ptlgQJBAPOr7ZY8Q5qJhSvKii0Eby9vfoueJwh6/sIugRWgNrn4" +
+            "Nu5GGQz/hAhy+vUFtxkA8eY4B6EC+8cWWYGGs59us6ECQQCY/vw8/HduK2b5Sfy8" +
+            "ym6h3tRYb6Vz+npAAm0hcD4S511rXKI9L3iBP46MvC7HXTfALqnA82kexZ5drYtv" +
+            "auJzAkB6hocvNhpgSKo3/N5CCKrH1W5yUhIah442oh+yeh9Kn+8vHPxXttvzS625" +
+            "KyiIYBtCwgXEBrYHw8s6ADut/YJBAkAhXCf/3ETmXsxbOwjC2Zj57q56gg2fllQl" +
+            "tOG60tCWKqCyEkbF9J3gAM3CXh4NFoRbgVE+Y1TegtSfNIIczz+FAkEAqBsHEkQF" +
+            "WgMqhQGl8So1mNKfMyj98lWyIIa0b4BloDR5t8IEnDtZgsdFz66PzU/oyPu1aJLo" +
+            "5PQ3mUVXOYf85A==" +
+//            "-----END PRIVATE KEY-----" +
             "";
-
 
     private static String rsa_public = "" +
 //            "-----BEGIN PUBLIC KEY-----" +
-            "MIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgHiVDou7DuJ95B587DgpMd6iJ7bA" +
-            "tRDHoC+Es7vBY36CuIsE7mS/04uhJesfp1blLrqcvX4YJh0alsFvXCPSSa9wSQoq" +
-            "AvumCx8fx+Y7PXi953HGfIU2osCVEdb1eNFGnTEYSFt10jnFaY2Zu1aIbOZlwbzT" +
-            "DfjmoWWXo9WqbL1vAgMBAAE=" +
+            "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCRoMm+OVJtBiufiAU9EQ4DNDrl" +
+            "0uRP3ixhnY/vYj72pTyxfRakinGRjJs4F0G2KHOV7naCc+3J5foDrI9Q3O4MiZza" +
+            "6QI7SiDSZLQd02eP2utDFRaidB+kxOJjEvE+04QkZJNw3QSro+olM63gR94KOnvR" +
+            "69M1QFc2l26UiPjTUwIDAQAB" +
 //            "-----END PUBLIC KEY-----" +
             "";
 
 
-
-
     @Test
     public void Tested() throws Exception {
-        byte[] data = "123456".getBytes("utf-8");
+        byte[] data = "1234567890你好12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890text12".getBytes("utf-8");
 
-        byte[] bytes = RSAUtil.encryptByPublicKey(Base64Utils.decode(rsa_public), data);
-        byte[] bytes1 = RSAUtil.decryptByPrivateKey(Base64Utils.decode(rsa_private), bytes);
+        byte[] bytes = RSAUtil.encryptByPublicKey(data, rsa_public);
+        byte[] bytes1 = RSAUtil.decryptByPrivateKey(bytes, rsa_PKCS8_private);
 
-        String s = RSAUtil.signByPrivateKey(Base64Utils.decode(rsa_private), data);
-        boolean b = RSAUtil.verifySignByPublicKey(Base64Utils.decode(rsa_public), data, s);
+        System.out.println(new String(bytes));
 
+        String s = RSAUtil.signByPrivateKey(data, rsa_PKCS8_private);
+        boolean b = RSAUtil.verifySignByPublicKey(data, s, rsa_public);
 
         Assert.assertArrayEquals(data, bytes1);
         Assert.assertTrue(b);
+
+        System.out.println(new String(bytes1, "utf-8"));
     }
 }
