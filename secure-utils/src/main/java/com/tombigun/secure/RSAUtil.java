@@ -21,10 +21,10 @@ public class RSAUtil {
     /**
      * 非对称加密密钥算法
      */
-    public static final String KEY_ALGORITHM_RSA = "RSA";
+    protected static final String KEY_ALGORITHM_RSA = "RSA";
 
     //rsa，签名算法可以是 md5withrsa 、 sha1withrsa 、 sha256withrsa 、 sha384withrsa 、 sha512withrsa
-    public static final String SIGN_ALGORITHM = "sha1withrsa";
+    protected static final String SIGN_ALGORITHM = "sha1withrsa";
 
     /**
      * RSA密钥长度
@@ -32,7 +32,7 @@ public class RSAUtil {
      * 密钥长度必须是64的倍数，
      * 范围在512至65536位之间。
      */
-    private static final int KEY_SIZE = 1024;
+    protected static final int KEY_SIZE = 1024;
 
     /**
      * 得到公钥
