@@ -58,3 +58,4 @@ MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCRoMm+OVJtBiufiAU9EQ4DNDrl
 >2. 在线RSA私钥加密解密 http://tool.chacuo.net/cryptrsaprikey
 >3. rsa私钥的格式: 原格式、pksc8格式 http://www.cnblogs.com/davidwang456/p/3924834.html
 >4. AES+RSA结合应用java示例  https://github.com/wustrive2008/aes-rsa-java
+>5. 加解密工具类 http://git.oschina.net/bayern.com/SecureUtils
