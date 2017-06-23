@@ -11,6 +11,7 @@
     <modules>
         <module>secure-utils</module>
         <module>test-ftp</module>
+        <module>test-jna</module>
     </modules>
 
     <properties>
