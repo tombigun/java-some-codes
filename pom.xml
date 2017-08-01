@@ -12,6 +12,7 @@
         <module>secure-utils</module>
         <module>test-ftp</module>
         <module>test-jna</module>
+        <module>gwt-webcamjs</module>
     </modules>
 
     <properties>
