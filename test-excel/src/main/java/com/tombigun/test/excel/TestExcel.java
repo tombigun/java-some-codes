@@ -61,7 +61,7 @@ public class TestExcel {
     }
 
     private static void writeExcel(String outputFileName, Map<String, BigDecimal> map) {
-        List<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<String>();
         for (String s : map.keySet()) {
             list.add(s);
         }
@@ -171,7 +171,7 @@ public class TestExcel {
             throw new RuntimeException("文件内容缺少列：金额");
         }
 
-        Map<String, BigDecimal> map = new HashMap<>();
+        Map<String, BigDecimal> map = new HashMap<String, BigDecimal>();
 
         for (int i = 1; i < rowNum; i++) {
             row = sheet.getRow(i);
