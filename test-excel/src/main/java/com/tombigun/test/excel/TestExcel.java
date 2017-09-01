@@ -173,8 +173,11 @@ public class TestExcel {
 
         Map<String, BigDecimal> map = new HashMap<String, BigDecimal>();
 
-        for (int i = 1; i < rowNum; i++) {
+        for (int i = 1; i <= rowNum; i++) {
             row = sheet.getRow(i);
+
+            if(row == null)
+                continue;
 
             String 发货单号num = row.getCell(发货单号column).getStringCellValue();
             String 开单日期num = row.getCell(开单日期column).getStringCellValue();
