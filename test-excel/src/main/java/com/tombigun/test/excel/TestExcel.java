@@ -28,7 +28,7 @@ public class TestExcel {
 
     }
 
-    public static String getOutputFileName(String inputFileName){
+    public static String getOutputFileName(String inputFileName) {
         File file = new File(inputFileName);
 
         String parent = file.getParent();
@@ -40,15 +40,15 @@ public class TestExcel {
 
         String outFileName = null;
         for (int j = 0; j < 10; j++) {
-            String tmp = parent + System.getProperty("file.separator") +s1 + "汇总-" + j + s2;
+            String tmp = parent + System.getProperty("file.separator") + s1 + "汇总-" + j + s2;
 
             if (!new File(tmp).exists()) {
                 outFileName = tmp;
                 break;
             }
         }
-        if(outFileName == null){
-            outFileName = parent + System.getProperty("file.separator") +s1 + "汇总-" + System.currentTimeMillis() + s2;
+        if (outFileName == null) {
+            outFileName = parent + System.getProperty("file.separator") + s1 + "汇总-" + System.currentTimeMillis() + s2;
         }
 
         return outFileName;
@@ -83,20 +83,26 @@ public class TestExcel {
 
         for (int i = 0; i < list.size(); i++) {
             String key = list.get(i);
-            String[] ss = key.split("@");
+            String[] ss = key.split("@", 2);
 
-            rowTmp = sheetTmp.createRow(i+1);
-            rowTmp.createCell(0).setCellValue(ss[0]);
-            rowTmp.createCell(1).setCellValue(ss[1]);
-            rowTmp.createCell(2).setCellValue(Double.valueOf(map.get(key).toString()));
+            rowTmp = sheetTmp.createRow(i + 1);
+
+            if (ss.length >= 2) {
+                rowTmp.createCell(0).setCellValue(ss[0]);
+                rowTmp.createCell(1).setCellValue(ss[1]);
+                rowTmp.createCell(2).setCellValue(Double.valueOf(map.get(key).toString()));
+            } else {
+                rowTmp.createCell(0).setCellValue(ss[0]);
+                rowTmp.createCell(2).setCellValue(Double.valueOf(map.get(key).toString()));
+            }
         }
 
-        rowTmp = sheetTmp.createRow(list.size()+2);
+        rowTmp = sheetTmp.createRow(list.size() + 2);
         rowTmp.createCell(0).setCellValue("合计" + list.size() + "份");
 
 
         OutputStream out = null;
-        try{
+        try {
             out = new FileOutputStream(outputFileName);
             wbTmp.write(out);
             out.flush();
@@ -106,7 +112,8 @@ public class TestExcel {
             if (out != null)
                 try {
                     out.close();
-                } catch (IOException e) { }
+                } catch (IOException e) {
+                }
         }
 
     }
@@ -123,15 +130,16 @@ public class TestExcel {
         } catch (RecordInputStream.LeftoverDataException e) {
             throw new RuntimeException("Excel版本较低，打开Excel随便点个，再保存", e);
         } catch (IOException e) {
-            if("Bad file descriptor".equals(e.getMessage())){
+            if ("Bad file descriptor".equals(e.getMessage())) {
                 throw new RuntimeException("Excel版本较低，打开Excel随便点个，再保存", e);
             } else
                 throw new RuntimeException("打开原明细文件失败", e);
         } finally {
-            if(is != null)
+            if (is != null)
                 try {
                     is.close();
-                } catch (IOException e) {}
+                } catch (IOException e) {
+                }
         }
 
         Sheet sheet = wb.getSheetAt(0);
@@ -146,63 +154,74 @@ public class TestExcel {
         int 金额column = -1;
 
         Row row = sheet.getRow(0);
-        if(row == null)
+        if (row == null)
             throw new RuntimeException("第一行缺少标题");
 
         Iterator<Cell> iterator = row.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             Cell cell = iterator.next();
             String value = cell.getStringCellValue();
 
-            if("发货单号".equals(value)){
+            if ("发货单号".equals(value)) {
                 发货单号column = cell.getColumnIndex();
-            } else if("开单日期".equals(value)){
+            } else if ("开单日期".equals(value)) {
                 开单日期column = cell.getColumnIndex();
-            } else if("金额".equals(value)){
+            } else if ("金额".equals(value)) {
                 金额column = cell.getColumnIndex();
             }
         }
 
-        if(发货单号column == -1){
+        if (发货单号column == -1) {
             throw new RuntimeException("文件内容缺少列：发货单号");
-        } else if(开单日期column == -1){
+        } else if (开单日期column == -1) {
             throw new RuntimeException("文件内容缺少列：开单日期");
-        } else if(金额column == -1){
+        } else if (金额column == -1) {
             throw new RuntimeException("文件内容缺少列：金额");
         }
 
         Map<String, BigDecimal> map = new HashMap<String, BigDecimal>();
 
+
         for (int i = 1; i <= rowNum; i++) {
-            row = sheet.getRow(i);
+            try {
+                row = sheet.getRow(i);
 
-            if(row == null)
-                continue;
+                if (row == null)
+                    continue;
 
-            String 发货单号num = row.getCell(发货单号column).getStringCellValue();
-            String 开单日期num = row.getCell(开单日期column).getStringCellValue();
+                String 发货单号num = row.getCell(发货单号column).getStringCellValue();
+                String 开单日期num = row.getCell(开单日期column).getStringCellValue();
 
-            String key = 发货单号num + "@" + 开单日期num;
+                if (发货单号num.startsWith("Rec") && "".equals(开单日期num))
+                    continue;
 
-            String cellValue;
-            Cell cell = row.getCell(金额column);
-            CellType typeEnum = cell.getCellTypeEnum();
-            switch (typeEnum) {
-                case NUMERIC:
-                    cellValue = Double.toString(cell.getNumericCellValue());
-                    break;
-                default:
-                    cellValue = cell.getStringCellValue();
-            }
+                String key = 发货单号num + "@" + 开单日期num;
 
-            BigDecimal 金额 = new BigDecimal(cellValue);
+                String cellValue;
+                Cell cell = row.getCell(金额column);
+                CellType typeEnum = cell.getCellTypeEnum();
+                switch (typeEnum) {
+                    case NUMERIC:
+                        cellValue = Double.toString(cell.getNumericCellValue());
+                        break;
+                    default:
+                        cellValue = cell.getStringCellValue();
+                }
 
-            if (map.containsKey(key)) {
-                BigDecimal 原有金额 = map.get(key);
+                if ("".equals(cellValue.trim()))
+                    cellValue = "0";
 
-                map.put(key, 原有金额.add(金额));
-            } else {
-                map.put(key, 金额);
+                BigDecimal 金额 = new BigDecimal(cellValue);
+
+                if (map.containsKey(key)) {
+                    BigDecimal 原有金额 = map.get(key);
+
+                    map.put(key, 原有金额.add(金额));
+                } else {
+                    map.put(key, 金额);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("明细文件第" + (i + 1) + "行数据有问题");
             }
         }
 
