@@ -14,6 +14,7 @@
         <module>test-jna</module>
         <module>gwt-webcamjs</module>
         <module>test-excel</module>
+        <module>test-basis</module>
     </modules>
 
     <properties>
