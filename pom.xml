@@ -15,6 +15,7 @@
         <module>gwt-webcamjs</module>
         <module>test-excel</module>
         <module>test-basis</module>
+        <module>test-xml</module>
     </modules>
 
     <properties>

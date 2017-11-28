@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<root>
+    <age>18</age>
+    <name>tom</name>
+    <student>
+        <school>挖掘机学校</school>
+        <score>90</score>
+    </student>
+</root>
