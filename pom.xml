@@ -16,6 +16,7 @@
         <module>test-excel</module>
         <module>test-basis</module>
         <module>test-xml</module>
+        <module>test-xml-spring</module>
     </modules>
 
     <properties>
