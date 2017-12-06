@@ -17,6 +17,7 @@
         <module>test-basis</module>
         <module>test-xml</module>
         <module>test-xml-spring</module>
+        <module>classloader</module>
     </modules>
 
     <properties>
