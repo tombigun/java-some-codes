@@ -18,6 +18,9 @@
         <module>test-xml</module>
         <module>test-xml-spring</module>
         <module>classloader</module>
+        <module>InterviewQuestions</module>
+        <module>test-spi</module>
+        <module>LoadBalance</module>
     </modules>
 
     <properties>
